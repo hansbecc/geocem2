@@ -14,9 +14,12 @@ The demo version it is at the CEM website of Interactive Systems, and you can se
 
 ## Table of Contents
 
--  [Setup](#setup)
+-  [Install](#install)
 -  [Start your server using Docker](#start-your-server-using-docker)
 -  [Stop the Docker Images](#stop-the-docker-images)
+-  [Change Project](#change-project)
+-  [GEOSERVER configuration to enable CORS](#geoserver-configuration-to-enable-cors)
+-  [Fully Wipe-out the Docker Images](#fully-wipe-out-the-docker-images)
 -  [Backup and Restore from Docker Images](#backup-and-restore-the-docker-images)
 -  [Recommended: Track your changes](#recommended-track-your-changes)
 -  [Hints: Configuring `requirements.txt`](#hints-configuring-requirementstxt)
@@ -24,7 +27,7 @@ The demo version it is at the CEM website of Interactive Systems, and you can se
 
 
 
-## Setup
+## Install
 
 This section covers the necessary steps to get the application running. It assumes you're using Ubuntu, so you may need
 to adapt some of the commands if this is not true.
@@ -222,8 +225,75 @@ To setup your project follow these instructions:
      ```bash
         docker-compose -f docker-compose.yml stop
      ```     
+[Installation reference](https://docs.geonode.org/en/master/install/advanced/project/index.html#deploy-an-instance-of-a-geonode-project-django-template-3-2-0-with-docker-on-localhost)
 
-### Fully Wipe-out the Docker Images
+## Change project
+
+Update the templates or the Django models. Once in the bash you can edit the templates or the Django models/classes. From here you can run any standard Django management command.
+
+Whenever you change a template/CSS/Javascript remember to run later:
+
+```bash
+python manage.py collectstatic
+```
+in order to update the files into the statics Docker volume.
+
+** Warning: ** This is an external volume, and a simple restart won’t update it. You have to be careful and keep it aligned with your changes.
+
+Whenever you need to change some settings or environment variable, the easiest thing to do is to:
+
+```bash
+# Stop the container
+docker-compose stop
+
+# Restart the container in Daemon mode
+docker-compose -f docker-compose.yml up -d
+```
+
+Whenever you change the model, remember to run later in the container via bash:
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+## GEOSERVER configuration to enable CORS
+
+- First, get into the bash Geoserver container:
+  ```bash
+  docker exec -it geoserver4geocem /bin/bash
+  ```
+- Second, get into the path of Tomcat, then uncomment the following <filter> and <filter-mapping> from webapps/geoserver/WEB-INF/web.xml:
+  ```bash
+  <filter>
+    <filter-name>cross-origin</filter-name>
+    <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+    <init-param>
+      <param-name>cors.allowed.origins</param-name>
+      <param-value>*</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.allowed.methods</param-name>
+      <param-value>GET,POST,PUT,DELETE,HEAD,OPTIONS</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.allowed.headers</param-name>
+      <param-value>*</param-value>
+    </init-param>
+  </filter>
+  ```
+and regardless of application server choice uncomment:
+  ```bash
+  <filter-mapping>
+    <filter-name>cross-origin</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>  
+  ```
+- Finally restart the geoserver
+[Reference](https://docs.geoserver.org/latest/en/user/production/container.html)
+
+
+## Fully Wipe-out the Docker Images
 
 **WARNING**: This will wipe out all the repositories created until now.
 
@@ -233,7 +303,7 @@ To setup your project follow these instructions:
 docker system prune -a
 ```
 
-[Installation reference](https://docs.geonode.org/en/master/install/advanced/project/index.html#deploy-an-instance-of-a-geonode-project-django-template-3-2-0-with-docker-on-localhost)
+
 
 ## Backup and Restore from Docker Images
 
