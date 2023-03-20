@@ -4,7 +4,7 @@ GeoNode template project. Generates a django project with GeoNode support.
 
 ## Table of Contents
 
--  [Developer Workshop](#developer-Workshop)
+-  [Deploy an instance of a geonode-project Django template with Docker](#deploy-an-instance-of-a-geonode-project-django-template-with-docker)
 -  [Create a custom project](#create-a-custom-project)
 -  [Start your server using Docker](#start-your-server-using-docker)
 -  [Stop the Docker Images](#stop-the-docker-images)
@@ -12,13 +12,17 @@ GeoNode template project. Generates a django project with GeoNode support.
 -  [Recommended: Track your changes](#recommended-track-your-changes)
 -  [Hints: Configuring `requirements.txt`](#hints-configuring-requirementstxt)
 
-## Developer Workshop
+## Deploy an instance of a geonode-project Django template with Docker
 
-Available at
+Prepare the environment
 
-  ```bash
-    http://geonode.org/dev-workshop
-  ```
+```bash
+sudo mkdir -p /opt/geonode_custom/
+sudo usermod -a -G www-data geonode
+sudo chown -Rf geonode:www-data /opt/geonode_custom/
+sudo chmod -Rf 775 /opt/geonode_custom/
+```
+
 
 ## Create a custom project
 
@@ -29,14 +33,17 @@ To setup your project follow these instructions:
 1. Generate the project
 
     ```bash
-    git clone https://github.com/GeoNode/geonode-project.git -b <your_branch>
+    cd /opt/geonode_custom/
+    git clone https://github.com/GeoNode/geonode-project.git -b 4.1.x
+    
     source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
     mkvirtualenv --python=/usr/bin/python3 geocem2
+    
     pip install Django==3.2.16
 
     django-admin startproject --template=./geonode-project -e py,sh,md,rst,json,yml,ini,env,sample,properties -n monitoring-cron -n Dockerfile geocem2
 
-    cd geocem2
+    cd /opt/geonode_custom/geocem2
     ```
 
 2. Create the .env file
@@ -63,6 +70,7 @@ To setup your project follow these instructions:
     - *file*: absolute path to a json file that contains all the above configuration
     
     Some important parameters configuration:
+    
     **NOTE**: In this example we are going to publish to the public IP http://200.144.244.238
 
     ```bash
@@ -76,8 +84,12 @@ To setup your project follow these instructions:
     ```bash
         DOCKER_ENV=production
     ```
-    backend
+    
     ```bash
+        # #################
+        # backend
+        # #################
+
         POSTGRES_USER=postgres
         POSTGRES_PASSWORD=postgres
         GEONODE_DATABASE=geocem2
