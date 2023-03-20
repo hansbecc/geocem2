@@ -1,18 +1,63 @@
-# Geocem2
+# GeoCEM
 
 GeoNode template project. Generates a django project with GeoNode support.
 
+## Description
+
+This repository contains a Django application based on Geonode project that provide metadata and geospatial data from the Metropolitan Study Center (CEM) of São Paulo.
+
+This information is shared with everybody.
+
+## Live Demo
+
+The demo version it is at the CEM website of Interactive Systems, and you can see [here](http://200.144.244.238)
+
 ## Table of Contents
 
--  [Deploy an instance of a geonode-project Django template with Docker](#deploy-an-instance-of-a-geonode-project-django-template-with-docker)
--  [Create a custom project](#create-a-custom-project)
+-  [Setup](#setup)
 -  [Start your server using Docker](#start-your-server-using-docker)
 -  [Stop the Docker Images](#stop-the-docker-images)
 -  [Backup and Restore from Docker Images](#backup-and-restore-the-docker-images)
 -  [Recommended: Track your changes](#recommended-track-your-changes)
 -  [Hints: Configuring `requirements.txt`](#hints-configuring-requirementstxt)
 
-## Deploy an instance of a geonode-project Django template with Docker
+
+
+
+## Setup
+
+This section covers the necessary steps to get the application running. It assumes you're using Ubuntu, so you may need
+to adapt some of the commands if this is not true.
+
+### Dependencies
+* Docker
+* Docker-compose
+
+### Dependencies installation and setup
+
+#### Docker
+##### Installation
+  ```bash
+    sudo add-apt-repository universe
+    sudo apt-get update -y
+    sudo apt-get install -y git-core git-buildpackage debhelper devscripts
+    sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+    sudo apt-get update -y
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose
+    sudo apt autoremove --purge
+
+    sudo adduser geonode
+    sudo usermod -aG sudo geonode
+    sudo usermod -aG docker geonode
+    su geonode
+  ```
+
+#### Deploy an instance of a geonode-project Django template with Docker
 
 Prepare the environment
 
@@ -24,7 +69,7 @@ sudo chmod -Rf 775 /opt/geonode_custom/
 ```
 
 
-## Create a custom project
+#### Create a custom project
 
 **NOTE**: *You can call your geonode project whatever you like **except 'geonode'**. Follow the naming conventions for python packages (generally lower case with underscores (``_``). In the examples below, replace ``geocem2`` with whatever you would like to name your project.*
 
@@ -35,7 +80,14 @@ To setup your project follow these instructions:
     ```bash
     cd /opt/geonode_custom/
     git clone https://github.com/GeoNode/geonode-project.git -b 4.1.x
+    ```
     
+    Make an instance out of the Django Template
+    ** Note: ** We will call our instance geo_cem. You can change the name at your convenience.
+
+    Install virtualenv and virtualenvwrapper, edit .bashrc file:
+
+    ```bash
     source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
     mkvirtualenv --python=/usr/bin/python3 geocem2
     
@@ -180,6 +232,8 @@ To setup your project follow these instructions:
 ```bash
 docker system prune -a
 ```
+
+[Installation reference](https://docs.geonode.org/en/master/install/advanced/project/index.html#deploy-an-instance-of-a-geonode-project-django-template-3-2-0-with-docker-on-localhost)
 
 ## Backup and Restore from Docker Images
 
