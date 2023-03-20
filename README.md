@@ -153,6 +153,10 @@ To setup your project follow these instructions:
      ```
      Access the site on http://200.144.244.238/
 
+## Stop the Docker Images
+     ```bash
+        docker-compose -f docker-compose.yml stop
+     ```     
 
 ### Fully Wipe-out the Docker Images
 
