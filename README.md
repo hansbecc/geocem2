@@ -7,6 +7,7 @@ GeoNode template project. Generates a django project with GeoNode support.
 -  [Developer Workshop](#developer-Workshop)
 -  [Create a custom project](#create-a-custom-project)
 -  [Start your server using Docker](#start-your-server-using-docker)
+-  [Stop the Docker Images](#stop-the-docker-images)
 -  [Backup and Restore from Docker Images](#backup-and-restore-the-docker-images)
 -  [Recommended: Track your changes](#recommended-track-your-changes)
 -  [Hints: Configuring `requirements.txt`](#hints-configuring-requirementstxt)
