@@ -43,8 +43,10 @@ To setup your project follow these instructions:
 
 2. Create the .env file
 
-    An `.env` file is requird to run the application. It can be created from the `.env.sample` either manually or with the create-envfile.py script.
-
+    An `.env` file is requird to run the application. It can be created from the `.env.sample` either manually or with the create-envfile.py script:
+    ```bash
+    pyhton crate-envfile.py
+    ```
     The script accepts several parameters to create the file, in detail:
 
     - *hostname*: e.g. master.demo.geonode.org, default localhost
@@ -61,135 +63,98 @@ To setup your project follow these instructions:
     - *secret key*: Django secret key (required inside the .env)
     - *sample_file*: absolute path to a env_sample file used to create the env_file. If not provided, the one inside the GeoNode project is used.
     - *file*: absolute path to a json file that contains all the above configuration
+    
+    Some important parameters configuration:
+    **NOTE**: In this example we are going to publish to the public IP http://200.144.244.238
 
-     **NOTE:**
-    - if the same configuration is passed in the json file and as an argument, the CLI one will overwrite the one in the JSON file
-    - If some value is not provided, a random string is used
+    ```bash
+    vim .env
+      --> replace localhost with 200.144.244.238 everywhere
+    ```
 
-      Example USAGE
-
+    ```bash
+        COMPOSE_PROJECT_NAME=geocem2
+    ```
+    ```bash
+        DOCKER_ENV=production
+    ```
+    backend
+    ```bash
+        POSTGRES_USER=postgres
+        POSTGRES_PASSWORD=postgres
+        GEONODE_DATABASE=geocem2
+        GEONODE_DATABASE_PASSWORD=geonode
+        GEONODE_GEODATABASE=geocem2_data
+        GEONODE_GEODATABASE_PASSWORD=geonode
+        GEONODE_DATABASE_SCHEMA=public
+        GEONODE_GEODATABASE_SCHEMA=public
+        DATABASE_HOST=db
+        DATABASE_PORT=5432
+        DATABASE_URL=postgis://geocem2:geonode@db:5432/geocem2
+        GEODATABASE_URL=postgis://geocem2_data:geonode@db:5432/geocem2_data
+     ```
+     ```bash
+        SITEURL=http://localhost/
+        ALLOWED_HOSTS="['django', '*']"
+     ```     
+     ```bash
+        # #################
+        # nginx
+        # HTTPD Server
+        # #################
+        GEONODE_LB_HOST_IP=200.144.244.238
+        GEONODE_LB_PORT=80
+        PUBLIC_PORT=80
+      ```
       ```bash
-      python create-envfile.py -f /opt/core/geonode-project/file.json \
-        --hostname localhost \
-        --https \
-        --email random@email.com \
-        --geonodepwd gn_password \
-        --geoserverpwd gs_password \
-        --pgpwd pg_password \
-        --dbpwd db_password \
-        --geodbpwd _db_password \
-        --clientid 12345 \
-        --clientsecret abc123 
-      ```
+        # IP or domain name and port where the server can be reached on HTTPS (leave HOST empty if you want to use HTTP only)
+        # port where the server can be reached on HTTPS
+        HTTP_HOST=200.144.244.238
+        HTTPS_HOST=200.144.244.238
 
-      Example JSON expected:
+        HTTP_PORT=80
+        HTTPS_PORT=443
+     ```
+     ```bash
+        # #################
+        # geoserver
+        # #################
+        GEOSERVER_WEB_UI_LOCATION=http://200.144.244.238/geoserver/
+        GEOSERVER_PUBLIC_LOCATION=http://200.144.244.238/geoserver/
+        GEOSERVER_LOCATION=http://geoserver:8080/geoserver/
+        GEOSERVER_ADMIN_USER=admin
+        GEOSERVER_ADMIN_PASSWORD=cem238
+     ```
+     ```bash
+        # #################
+        # Security
+        # #################
+        # Admin Settings
+        #
+        # ADMIN_PASSWORD is used to overwrite the GeoNode admin password **ONLY** the first time
+        # GeoNode is run. If you need to overwrite it again, you need to set the env var FORCE_REINIT,
+        # otherwise the invoke updateadmin task will be skipped and the current password already stored
+        # in DB will honored.
 
-      ```JSON
-      {
-        "hostname": "value",
-        "https": "value",
-        "email": "value",
-        "geonodepwd": "value",
-        "geoserverpwd": "value",
-        "pgpwd": "value",
-        "dbpwd": "value",
-        "geodbpwd": "value",
-        "clientid": "value",
-        "clientsecret": "value"
-      } 
-      ```
+        ADMIN_USERNAME=admin
+        ADMIN_PASSWORD=cem238
+        ADMIN_EMAIL=None
+     ```
+     To allow user registration:
+     ```bash
+        # Users Registration
+        ACCOUNT_OPEN_SIGNUP=True
+     ```
+     Modify the code and the templates and rebuild the Docker Containers
+     ```bash
+        docker-compose -f docker-compose.yml build --no-cache
+     ```
+     Finally, run the containers
+     ```bash
+        docker-compose -f docker-compose.yml up -d
+     ```
+     Access the site on http://200.144.244.238/
 
-### Start your server
-*Skip this part if you want to run the project using Docker instead* see [Start your server using Docker](#start-your-server-using-docker)
-
-1. Setup the Python Dependencies
-
-    **NOTE**: *Important: modify your `requirements.txt` file, by adding the `GeoNode` branch before continue!*
-
-    (see [Hints: Configuring `requirements.txt`](#hints-configuring-requirementstxt))
-
-    ```bash
-    cd src
-    pip install -r requirements.txt --upgrade
-    pip install -e . --upgrade
-
-    # Install GDAL Utilities for Python
-    pip install pygdal=="`gdal-config --version`.*"
-
-    # Dev scripts
-    mv ../.override_dev_env.sample ../.override_dev_env
-    mv manage_dev.sh.sample manage_dev.sh
-    mv paver_dev.sh.sample paver_dev.sh
-
-    source ../.override_dev_env
-
-    # Using the Default Settings
-    sh ./paver_dev.sh reset
-    sh ./paver_dev.sh setup
-    sh ./paver_dev.sh sync
-    sh ./paver_dev.sh start
-    ```
-
-2. Access GeoNode from browser
-
-    **NOTE**: default admin user is ``admin`` (with pw: ``admin``)
-
-    ```bash
-    http://localhost:8000/
-    ```
-
-### Start your server using Docker
-
-You need Docker 1.12 or higher, get the latest stable official release for your platform.
-Once you have the project configured run the following command from the root folder of the project.
-
-1. Run `docker-compose` to start it up (get a cup of coffee or tea while you wait)
-
-    ```bash
-    docker-compose build --no-cache
-    docker-compose up -d
-    ```
-
-    ```bash
-    set COMPOSE_CONVERT_WINDOWS_PATHS=1
-    ```
-
-    before running `docker-compose up`
-
-2. Access the site on http://localhost/
-
-## Run the instance in development mode
-
-### Use dedicated docker-compose files while developing
-
-**NOTE**: In this example we are going to keep localhost as the target IP for GeoNode
-
-  ```bash
-  docker-compose -f docker-compose.development.yml -f docker-compose.development.override.yml up
-  ```
-
-## Run the instance on a public site
-
-### Preparation of the image (First time only)
-
-**NOTE**: In this example we are going to publish to the public IP http://123.456.789.111
-
-```bash
-vim .env
-  --> replace localhost with 123.456.789.111 everywhere
-```
-
-### Startup the image
-
-```bash
-docker-compose up --build -d
-```
-
-### Stop the Docker Images
-
-```bash
-docker-compose stop
-```
 
 ### Fully Wipe-out the Docker Images
 
@@ -282,72 +247,4 @@ POSTGRESQL_MAX_CONNECTIONS=200
 ```
 
 In this case PostgreSQL will run accepting 200 maximum connections.
-
-## Test project generation and docker-compose build Vagrant usage
-
-Testing with [vagrant](https://www.vagrantup.com/docs) works like this:
-What vagrant does:
-
-Starts a vm for test on docker swarm:
-    - configures a GeoNode project from template every time from your working directory (so you can develop directly on geonode-project).
-    - exposes service on localhost port 8888
-    - rebuilds everytime everything with cache [1] to avoid banning from docker hub with no login.
-    - starts, reboots to check if docker services come up correctly after reboot.
-
-```bash
-vagrant plugin install vagrant-reload
-#test things for docker-compose
-vagrant up
-# check services are up upon reboot
-vagrant ssh geonode-compose -c 'docker ps'
-```
-
-Test geonode on [http://localhost:8888/](http://localhost:8888/)
-
-To clean up things and delete the vagrant box:
-
-```bash
-vagrant destroy -f
-```
-
-## Test project generation and Docker swarm build on vagrant
-
-What vagrant does:
-
-Starts a vm for test on docker swarm:
-    - configures a GeoNode project from template every time from your working directory (so you can develop directly on geonode-project).
-    - exposes service on localhost port 8888
-    - rebuilds everytime everything with cache [1] to avoid banning from docker hub with no login.
-    - starts, reboots to check if docker services come up correctly after reboot.
-
-To test on a docker swarm enable vagrant box:
-
-```bash
-vagrant up
-VAGRANT_VAGRANTFILE=Vagrantfile.stack vagrant up
-# check services are up upon reboot
-VAGRANT_VAGRANTFILE=Vagrantfile.stack vagrant ssh geonode-compose -c 'docker service ls'
-```
-
-Test geonode on [http://localhost:8888/](http://localhost:8888/)
-Again, to clean up things and delete the vagrant box:
-
-```bash
-VAGRANT_VAGRANTFILE=Vagrantfile.stack vagrant destroy -f
-```
-
-for direct deveolpment on geonode-project after first `vagrant up` to rebuild after changes to project, you can do `vagrant reload` like this:
-
-```bash
-vagrant up
-```
-
-What vagrant does (swarm or comnpose cases):
-
-Starts a vm for test on plain docker service with docker-compose:
-    - configures a GeoNode project from template every time from your working directory (so you can develop directly on geonode-project).
-    - rebuilds everytime everything with cache [1] to avoid banning from docker hub with no login.
-    - starts, reboots.
-
-[1] to achieve `docker-compose build --no-cache` just destroy vagrant boxes `vagrant destroy -f`
 
