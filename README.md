@@ -103,7 +103,7 @@ To setup your project follow these instructions:
     
     Make an instance out of the Django Template
     
-    ** Note: ** We will call our instance geocem2. You can change the name at your convenience.
+    **Note**: We will call our instance geocem2. You can change the name at your convenience.
 
     Install virtualenv and virtualenvwrapper, edit .bashrc file:
 
@@ -236,7 +236,7 @@ To setup your project follow these instructions:
      ```bash
         docker-compose -f docker-compose.yml up -d
      ```
-     Access the site on http://200.144.244.238/
+     Access the site on https://200.144.244.238/
 
 ## Stop the Docker Images
      ```bash
