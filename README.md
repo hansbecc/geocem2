@@ -234,18 +234,14 @@ To setup your project follow these instructions:
         docker-compose -f docker-compose.yml build --no-cache
      
      Finally, run the containers
-     
-     ```bash
+    
         docker-compose -f docker-compose.yml up -d        
-     ```
      
      Access the site on https://200.144.244.238/
 
 ## Stop the Docker Images
 
-     ```bash
         docker-compose -f docker-compose.yml stop
-     ```     
      
 [Installation reference](https://docs.geonode.org/en/master/install/advanced/project/index.html#deploy-an-instance-of-a-geonode-project-django-template-3-2-0-with-docker-on-localhost)
 
