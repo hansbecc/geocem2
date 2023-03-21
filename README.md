@@ -17,7 +17,7 @@ The demo version it is at the CEM website of Interactive Systems, and you can se
 -  [Install](#install)
 -  [Start your server using Docker](#start-your-server-using-docker)
 -  [Stop the Docker Images](#stop-the-docker-images)
--  [Change Project](#change-project)
+-  [Change elements of the project](#change-elements-of-the-project)
 -  [GEOSERVER configuration to enable CORS](#geoserver-configuration-to-enable-cors)
 -  [Fully Wipe-out the Docker Images](#fully-wipe-out-the-docker-images)
 -  [Backup and Restore from Docker Images](#backup-and-restore-the-docker-images)
@@ -38,26 +38,42 @@ to adapt some of the commands if this is not true.
 
 ### Dependencies installation and setup
 
-#### Docker
-##### Installation
+#### Install the Docker and docker-compose packages on a Ubuntu host
+##### Docker setup (First time only)
   ```bash
+    # install OS level packages..
     sudo add-apt-repository universe
     sudo apt-get update -y
-    sudo apt-get install -y git-core git-buildpackage debhelper devscripts
-    sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+    sudo apt-get install -y git-core git-buildpackage debhelper devscripts python3.10-dev python3.10-venv virtualenvwrapper
+    sudo apt-get install -y apt-transport-https ca-certificates curl lsb-release gnupg gnupg-agent software-properties-common vim
 
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-
-    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    # add docker repo and packages...
+    sudo mkdir -p /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
     sudo apt-get update -y
     sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose
     sudo apt autoremove --purge
 
+    # add your user to the docker group...
+    sudo usermod -aG docker ${USER}
+    su ${USER}
+
     sudo adduser geonode
     sudo usermod -aG sudo geonode
     sudo usermod -aG docker geonode
     su geonode
+  ```
+##### Upgrade docker-compose to the latest version
+  ```bash
+  DESTINATION=$(which docker-compose)
+  sudo apt-get remove docker-compose
+  sudo rm $DESTINATION
+  VERSION=$(curl --silent https://api.github.com/repos/docker/compose/releases/latest | grep -Po '"tag_name": "\K.*\d')
+  sudo curl -L https://github.com/docker/compose/releases/download/${VERSION}/docker-compose-$(uname -s)-$(uname -m) -o $DESTINATION
+  sudo chmod 755 $DESTINATION
   ```
 
 #### Deploy an instance of a geonode-project Django template with Docker
@@ -86,7 +102,8 @@ To setup your project follow these instructions:
     ```
     
     Make an instance out of the Django Template
-    ** Note: ** We will call our instance geo_cem. You can change the name at your convenience.
+    
+    ** Note: ** We will call our instance geocem2. You can change the name at your convenience.
 
     Install virtualenv and virtualenvwrapper, edit .bashrc file:
 
@@ -227,11 +244,11 @@ To setup your project follow these instructions:
      ```     
 [Installation reference](https://docs.geonode.org/en/master/install/advanced/project/index.html#deploy-an-instance-of-a-geonode-project-django-template-3-2-0-with-docker-on-localhost)
 
-## Change project
+## Change elements of the project
 
 Update the templates or the Django models. Once in the bash you can edit the templates or the Django models/classes. From here you can run any standard Django management command.
 
-Whenever you change a template/CSS/Javascript remember to run later:
+Whenever you change a template/CSS/Javascript/static remember to run later:
 
 ```bash
 python manage.py collectstatic
@@ -244,7 +261,7 @@ Whenever you need to change some settings or environment variable, the easiest t
 
 ```bash
 # Stop the container
-docker-compose stop
+docker-compose -f docker-compose.yml stop
 
 # Restart the container in Daemon mode
 docker-compose -f docker-compose.yml up -d
@@ -302,9 +319,6 @@ and regardless of application server choice uncomment:
 ```bash
 docker system prune -a
 ```
-
-
-
 ## Backup and Restore from Docker Images
 
 ### Run a Backup
