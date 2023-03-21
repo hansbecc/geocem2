@@ -227,17 +227,22 @@ To setup your project follow these instructions:
         # Users Registration
         ACCOUNT_OPEN_SIGNUP=True
      ```
+
 ## Start your server using Docker
      Modify the code and the templates and rebuild the Docker Containers
      
      ```bash
+     
         docker-compose -f docker-compose.yml build --no-cache
+        
      ```
      
      Finally, run the containers
      
      ```bash
+     
         docker-compose -f docker-compose.yml up -d
+        
      ```
      
      Access the site on https://200.144.244.238/
