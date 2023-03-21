@@ -229,10 +229,11 @@ To setup your project follow these instructions:
      ```
 
 ## Start your server using Docker
-     Modify the code and the templates and rebuild the Docker Containers
-   
-        docker-compose -f docker-compose.yml build --no-cache
-     
+
+Modify the code and the templates and rebuild the Docker Containers
+```bash   
+   docker-compose -f docker-compose.yml build --no-cache
+```     
      Finally, run the containers
     
         docker-compose -f docker-compose.yml up -d        
@@ -256,7 +257,7 @@ python manage.py collectstatic
 ```
 in order to update the files into the statics Docker volume.
 
-** Warning: ** This is an external volume, and a simple restart won’t update it. You have to be careful and keep it aligned with your changes.
+**Warning**: This is an external volume, and a simple restart won’t update it. You have to be careful and keep it aligned with your changes.
 
 Whenever you need to change some settings or environment variable, the easiest thing to do is to:
 
