@@ -1,0 +1,17 @@
+{% extends "geonode-mapstore-client/snippets/brand_navbar.html" %}
+{% load static %}
+{% block extra_style %}
+<style>
+ #gn-brand-navbar {
+   background: transparent url("/static/img/logo_geocem.png") no-repeat;
+   background-size: 150px 60px;
+   background-position: left center;
+   background-position-x: 100px;
+ }
+</style>
+{% endblock %}
+<!--- 
+{% block logo_src %}
+{% static 'img/logo_geocem.png' %}
+{% endblock %}--->
+

@@ -1,0 +1,24 @@
+{% extends "geonode-mapstore-client/snippets/brand_navbar.html" %}
+{% load static %}
+{% block extra_style %}
+<style>
+  .msgapi .gn-hero {
+  background-color: var(--gn-jumbotron-bg,#042E6F);
+  color: var(--gn-jumbotron-color,#fff);
+  }
+  .msgapi .gn-menu.gn-primary { 
+  background-color: var(--gn-primary,#042E6F);
+  color: var(--gn-primary-contrast,#fff);
+  }
+  .msgapi .btn-primary { 
+  background-color: var(--gn-button-primary-bg,#042E6F); 
+  border-color: var(--gn-button-primary-border-color,#042E6F);
+  color: var(--gn-button-primary-color,#fff);
+}
+</style>
+{% endblock %}
+<!--- 
+{% block logo_src %}
+{% static 'img/logo_geocem.png' %}
+{% endblock %}--->
+

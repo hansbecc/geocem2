@@ -1,0 +1,181 @@
+{% load static %}
+{% block extra_style %}
+<style>
+.sponsor-fapesp {
+  background: url("/static/img/apoio-logo-fapesp.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  text-indent: -9999px;
+  height: 60px;
+  width: 150px;
+  float: left;
+}
+.sponsor-cepid {
+  background: url("/static/img/apoio-logo-cepid.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  text-indent: -9999px;
+  height: 66px;
+  width: 75px;
+  float: left;
+}
+.sponsor-usp {
+  background: url("/static/img/apoio-logo-usp.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  text-indent: -9999px;
+  height: 60px;
+  width: 125px;
+  float: left;
+}
+.sponsor-cebrap {
+  background: url("/static/img/apoio-logo-cebrap.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  text-indent: -9999px;
+  height: 60px;
+  width: 138px;
+  float: left;  
+}
+.inst-brand {
+  float: left;
+  padding: 14px 15px;
+  font-size: 20px;
+  line-height: 22px;
+}
+.inst-brand {
+  background: url("/static/img/logo-removebg.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  text-indent: -9999px;
+  height: 60px;
+  width: 150px;
+}
+/* Footer
+----------------------- */
+.gn-footer {
+  color: #000;/*white;*/
+  padding: 1.5em;
+  background-color: #BBB;
+}
+.gn-footer a {
+  color: #000;/*#ff8f31;*/
+}
+.gn-footer a:hover {
+  color: #333333;/*#eb6b00;*/
+}
+
+/* for new style */
+
+.gn-footer .wrap-outer-footer-institute {
+    background: #fff;
+    font-size: 9px;
+    color: #333;
+    right: 0;
+    left: 0;
+    position: fixed;
+}
+.gn-footer .container {    
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1200px;
+}
+.gn-footer .wrapper-institute {
+    padding: 20px 0;
+}
+.gn-footer .gn-footer-info-institute {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: flex-end;
+    -ms-flex-align: flex-end;
+    align-items: flex-end;
+}
+.gn-footer .about-cem {
+    color: #000000; /*#dedede;*/
+    margin-right: 4%;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.gn-footer-info-institute img {
+  float: left;
+  /*width: 100px;*/
+  height: 40px;
+  padding-left: 18px;
+}
+.gn-footer .about-cem span {
+  position: relative;
+  left: 20px;
+}
+/*end*/
+</style>
+{% endblock %}  
+<footer class="gn-footer">
+
+<div class="container">      
+      <div class="row"> 
+	<div class="col-md-2">
+	  <a class="inst-brand" href="https://centrodametropole.fflch.usp.br/"><span class="title">CEM</span></a>
+	</div>           
+	<div class="col-lg-7">
+	  <div class="container"> 
+	    <div class="row"> 
+	      <div class="col-md-2">
+	  	<ul class="list-unstyled">
+	  	  <li><a href="https://centrodametropole.fflch.usp.br/">Sobre o CEM</a></li>
+		  
+	  	</ul>
+              </div>
+	      <div class="col-md-3">
+	  	<ul class="list-unstyled">
+	  	  <li><a href="https://centrodametropole.fflch.usp.br/pt-br/sistemas-interativos">Sistemas Interativos</a></li>
+		  
+	  	</ul>
+
+              </div>
+	      <div class="col-md-2">
+	  	<ul class="list-unstyled">
+	  	  <li><a href="https://centrodametropole.fflch.usp.br/fale-conosco">Fale conosco</a></li>
+		  
+	  	</ul>
+              </div>
+	    </div> 
+	    <div class="row"> 
+	      <div class="col-md-2">
+	  	<a class="sponsor-fapesp" href="http://www.fapesp.br/"></a>
+	      </div>
+	      <div class="col-md-1">
+	  	<a class="sponsor-cepid" href="http://cepid.fapesp.br/home/"></a>
+	      </div>
+	      <div class="col-md-2">
+	  	<a class="sponsor-cebrap" href="http://cebrap.org.br/"></a>
+	      </div>
+	      <div class="col-md-2">
+	  	<a class="sponsor-usp" href="http://www5.usp.br/"></a>
+	      </div>
+	    </div> <!-- row3 -->
+	    </div> <!-- container 2 -->
+	</div> <!--column 6 -->
+	
+	<div class="col-md-3 text-right">
+	   	    
+	  <ul class="list-unstyled">
+	    <li>Conteúdo desenvolvido pelo CEM</li>
+	    <li>Notifiquenos sobre o copyright</li>	    
+            <li>Powered by <a href="http://geonode.org" target="_blank">GeoNode</a></li>              
+	  </ul>	   
+	  
+	</div>
+	
+      </div><!-- row 1 -->
+    </div><!-- container 1-->
+</footer>
