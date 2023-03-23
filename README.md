@@ -227,21 +227,23 @@ To setup your project follow these instructions:
         # Users Registration
         ACCOUNT_OPEN_SIGNUP=True
      ```
+
 ## Start your server using Docker
-     Modify the code and the templates and rebuild the Docker Containers
-     ```bash
-        docker-compose -f docker-compose.yml build --no-cache
-     ```
-     Finally, run the containers
-     ```bash
-        docker-compose -f docker-compose.yml up -d
-     ```
-     Access the site on https://200.144.244.238/
+
+Modify the code and the templates and rebuild the Docker Containers
+```bash   
+   docker-compose -f docker-compose.yml build --no-cache
+```     
+Finally, run the containers
+```bash     
+   docker-compose -f docker-compose.yml up -d        
+```     
+Access the site on https://200.144.244.238/
 
 ## Stop the Docker Images
-     ```bash
-        docker-compose -f docker-compose.yml stop
-     ```     
+```bash 
+   docker-compose -f docker-compose.yml stop
+``` 
 [Installation reference](https://docs.geonode.org/en/master/install/advanced/project/index.html#deploy-an-instance-of-a-geonode-project-django-template-3-2-0-with-docker-on-localhost)
 
 ## Change elements of the project
@@ -255,7 +257,7 @@ python manage.py collectstatic
 ```
 in order to update the files into the statics Docker volume.
 
-** Warning: ** This is an external volume, and a simple restart won’t update it. You have to be careful and keep it aligned with your changes.
+**Warning**: This is an external volume, and a simple restart won’t update it. You have to be careful and keep it aligned with your changes.
 
 Whenever you need to change some settings or environment variable, the easiest thing to do is to:
 
@@ -377,6 +379,9 @@ Step 2. Init git locally and do the first commit:
 git init
 git add *
 git commit -m "Initial Commit"
+git branch -M main
+git remote add origin https://github.com/repo_demo/demo.git
+git push -u origin main
 ```
 
 Step 3. Set up a free account on github or bitbucket and make a copy of the repo there.
